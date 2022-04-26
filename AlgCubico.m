@@ -1,21 +1,23 @@
 function [min_f, repr, iter, lado_fin]=AlgCubico(N, n, func, L, lado, v_inf, tol, max_iter)
 
-format longE
+format longE %Formato numérico de salida: notación científica con 15 decimales.
 
 % DESCRIPCIÓN DE VARIABLES DE ENTRADA.
 % ------------------------------------
-% N          % Dimensión del problema.
-% n          % Cte de partición.
+% N          % Dimensión del problema. Debe ser un valor natural.
+% n          % Cte de partición. Debe ser un valor natural mayor o igual a 2.
 % funcion    % La función objetivo de la que se busca el mínimo global.
                 % Damos por hecho que la función está bien definida con
-                % número correcto de variables.
+                % número correcto de variables acorde a N.
                 % Se define como función M A T R I C I A L.
-                % Ejemplo: f(x, y) = y - x sería f=@(M) (M(2,:) - M(1,:))
-% L          % Cte de Lipschitz (o aproximación) de la función.
-% lado       % Lado del cubo y dominio.
+                % Ejemplo: f(x, y) = y - x^2 sería f=@(M) (M(2,:) - M(1,:).^2)
+% L          % Cte de Lipschitz (o aproximación) de la función. Debe ser un valor positivo.
+% lado       % Lado del cubo y dominio. Debe ser un valor positivo.
 % v_inf      % Vértice inferior del dominio cúbico.
+                % Debe tener un número correcto de componentes acorde a N.
 % tol        % Precisión con la cual se da por buena la aproximación.
-% max_iter   % Número máximo de iteraciones admisibles.
+             % No debe superar la precisión establecida para MatLab.
+% max_iter   % Número máximo de iteraciones admisibles. Debe ser un valor natural.
 
 
 % DESCRIPCIÓN DE VARIABLES DE SALIDA.
@@ -30,7 +32,7 @@ format longE
 % ----------------------------
 cte_elim=L*lado*sqrt(N);    % Cte de eliminación. La inicializamos así y en cada iteración la
                                 % dividimos por la constante de partición.
-iter=1;                     % Número de iteración.
+iter=1;                     % Índice de iteración.
 
 
 % ===== GENERADOR DE CUADRÍCULA. ======
@@ -38,7 +40,7 @@ iter=1;                     % Número de iteración.
 % En cada cubo superviviente se genera el mismo tipo de partición o MALLA.
 % La generamos fuera del bucle y la aplicamos a cada cubo.
 % Se generan n^N puntos de N coordenadas, que listaremos como matriz.
-% Cada columna será un punto. Cada fila, una coordenada.
+% Cada columna será un punto de R^{N}. Cada fila, una coordenada.
 malla=zeros(N,n^N);
 for num=1:n^N
     num_aux=num-1;
@@ -53,22 +55,23 @@ clear num_aux; clear num;
 repr=v_inf;
 
 
+% ===== INICIO DEL CUERPO PRINCIPAL. =====
 while (iter<=max_iter)&&(cte_elim/(n^iter)>tol)
     
     % ===== CREACIÓN DE REPRESENTANTES. =====
     % ---------------------------------------
-    % Calculamos también las imágenes de los representantes.
     repr_aux=[];
     for pos=1:size(repr,2)
         repr_aux=[repr_aux,repr(:,pos)+malla*(lado/(n^iter))];
     end
     repr=repr_aux;
     clear repr_aux;
-    f_repr=func(repr);
+    
 
     
     % ===== APROXIMACIÓN DEL MÍNIMO. ======
     % -------------------------------------
+    f_repr=func(repr);
     min_f=min(f_repr);
     
     
@@ -87,22 +90,11 @@ end
 % -------------------------------------
 
 iter=iter-1;
-
-
-
-% ===== CREACIÓN DE LA GRÁFICA. =====
-% -----------------------------------
 lado_fin=lado/(n^iter);
-if N==1
-    hold on
-    %plot([repr(1,:); repr(1,:)+lado_fin], [f_repr; f_repr], 'o', 'Color',
-    %'blue')
-    plot([repr(1,:); repr(1,:)+lado_fin], [f_repr; f_repr], 'Color','blue')
-    scatter(repr, f_repr, 'red')
-elseif N==2
-    %fill([repr(1,:); repr(1,:)+lado_fin; repr(1,:)+lado_fin; repr(1,:); repr(1,:)], ...
-    %    [repr(2,:); repr(2,:); repr(2,:)+lado_fin; repr(2,:)+lado_fin; repr(2,:);], 'blue')
-    scatter(repr(1,:), repr(2,:), 'blue')
-elseif N==3
-    scatter3(repr(1,:), repr(2,:), repr(3,:), 'blue')
-end
+
+
+% Variables que se pueden agregar como salida del programa:
+  % - f_repr;                     (Ya creada)
+  % - num_elim = size(pos_elim, 2); (No creada. Representaría el número de índices eliminados en la iteración.)
+
+
