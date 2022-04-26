@@ -1,6 +1,7 @@
 % Comándos básicos para la creación de gráficas con la intención de imprimir la familia de representantes
 % obtenida mediante el Algoritmo Cúbico.
 % Por ello, suponemos que contamos con las variables de salida de AlgCubico: repr, lado_fin.
+% La variable f_repr se usa, pero no es una salida del algoritmo. Evidentemente, se puede calcular como f_repr=func(repr)
 
 
 % ===== Cuando N=1 =====
@@ -31,5 +32,11 @@ scatter(repr(1,:), repr(2,:), 'blue')
 
 % ===== Cuando N=3 =====
 % ----------------------
-    scatter3(repr(1,:), repr(2,:), repr(3,:), 'blue')
-end
+    % Cada representante identifica un cubo en R^3.
+    % La vía más recomendada para su representación es 
+scatter3(repr(1,:), repr(2,:), repr(3,:), 'blue')
+    % Se podría imprimir cada cubo, pero MatLab no da la opción de crear sólidos.
+    % La alternativa sería usar comandos fill (uno por cara del cubo, se puede evitar duplicar caras)
+    % pero supondría un alto coste computacional; más alto teniendo en cuenta que la salida del programa
+    % pueden ser matrices con millones de elementos.
+    
