@@ -1,112 +1,35 @@
-function [min_f, repr, iter, lado_fin]=Prueba(N, n, func, L, lado, v_inf, tol, max_iter)
-
-format longE
-
-% DESCRIPCIÓN DE VARIABLES DE ENTRADA.
-% ------------------------------------
-% N          % Dimensión del problema.
-% n          % Cte de partición.
-% funcion    % La función objetivo de la que se busca el mínimo global.
-                % Damos por hecho que la función está bien definida con
-                % número correcto de variables.
-                % Se define como función M A T R I C I A L.
-                % Ejemplo: f(x, y) = y - x sería f=@(M) (M(2,:) - M(1,:))
-% L          % Cte de Lipschitz (o aproximación) de la función.
-% lado       % Lado del cubo y dominio.
-% v_inf      % Vértice inferior del dominio cúbico.
-% tol        % Precisión con la cual se da por buena la aproximación.
-% max_iter   % Número máximo de iteraciones admisibles.
+% Comándos básicos para la creación de gráficas con la intención de imprimir la familia de representantes
+% obtenida mediante el Algoritmo Cúbico.
+% Por ello, suponemos que contamos con las variables de salida de AlgCubico: repr, lado_fin.
 
 
-% DESCRIPCIÓN DE VARIABLES DE SALIDA.
-% -----------------------------------
-% min_f      % Valor aproximado del mínimo absoluto.
-% repr       % Lista de representantes de cubos que pueden contener minimizadores.
-% iter       % Número de la iteración en la que se ha detenido el programa.
-% lado_fin   % Longitud de los últimos subcubos generados.
+% ===== Cuando N=1 =====
+% ----------------------
+    % La representación gráfica se podría realizar sobre un mismo eje,
+    % pero es más representativo imprimir el resultado como gráfica (punto, imagen).
+    % Para ello se pueden usar los comandos:
+plot([repr(1,:); repr(1,:)+lado_fin], [f_repr; f_repr], 'Color','blue')
+    % Imprime los segmentos [repr(nº x); repr(nº x)+lado] en color azul a una altura igual a su imagen.
+    % Muy recomendable cuando los representantes se concentran como un conjunto conexo.
+scatter(repr, f_repr, 'blue')
+    % Imprime redondeles 'o' azules centrados en el par (repr, imagen).
+    % Muy recomendable cuando los representantes se concentran como conjuntos no conexos.
 
 
-% INICIALIZACIÓN DE VARIABLES.
-% ----------------------------
-cte_elim=L*lado*sqrt(N)    % Cte de eliminación. La inicializamos así y en cada iteración la
-                                % dividimos por la constante de partición.
-iter=1                     % Número de iteración.
+% ===== Cuando N=2 =====
+% ----------------------
+    % Cada representante identifica un cuadrado en R^2.
+fill([repr(1,:); repr(1,:)+lado_fin; repr(1,:)+lado_fin; repr(1,:); repr(1,:)], ...
+[repr(2,:); repr(2,:); repr(2,:)+lado_fin; repr(2,:)+lado_fin; repr(2,:);], 'blue')
+    % Imprime el cuadrado azul de vértice inferior repr(nº columna) del lado indicado.
+    % No muy recomendable cuando los representantes se concentran como conjunto no conexo.
+    % Se podría hacer algo similar al caso N=1 e imprimirlos a sus correspondientes alturas,
+      % dando cierta idea del comportamiento de su gráfica.
+scatter(repr(1,:), repr(2,:), 'blue')
+    % Imprime redondeles 'o' azules centrados en el punto (repr(1, nº col), repr(2, nº col)).
 
 
-% ===== GENERADOR DE CUADRÍCULA. ======
-% -------------------------------------
-% En cada cubo superviviente se genera el mismo tipo de partición o MALLA.
-% La generamos fuera del bucle y la aplicamos a cada cubo.
-% Se generan n^N puntos de N coordenadas, que listaremos como matriz.
-% Cada columna será un punto. Cada fila, una coordenada.
-malla=zeros(N,n^N);
-for num=1:n^N
-    num_aux=num-1;
-    for comp=N:-1:1
-        malla(N-comp+1, num)=floor(num_aux/(n^(comp-1)));
-        num_aux=num_aux-malla(N-comp+1, num)*(n^(comp-1));
-    end
-end
-clear num_aux; clear num;
-
-
-% Empezamos con un único representante: el vértice inferior del dominio.
-repr=v_inf;
-
-
-while (iter<=max_iter)&&(cte_elim/(n^iter)>tol)
-    
-    % ===== CREACIÓN DE REPRESENTANTES. =====
-    % ---------------------------------------
-    % Calculamos también las imágenes de los representantes.
-    repr_aux=[]
-    for pos=1:size(repr,2)
-        repr_aux=[repr_aux,repr(:,pos)+malla*(lado/(n^iter))];
-    end
-    repr=repr_aux;
-    clear repr_aux;
-    scatter3(repr(1,:), repr(2,:), repr(3,:), 'black')
-
-    
-    % ===== APROXIMACIÓN DEL MÍNIMO. ======
-    % -------------------------------------
-    f_repr=func(repr);
-    min_f=min(f_repr)
-    hold on
-    
-    % ===== CRITERIO DE ELIMINACIÓN. =====
-    % ------------------------------------
-    pos_elim=[];
-    cte_elim/(n^iter)
-    pos_elim=find((f_repr-min_f)>(cte_elim/(n^iter)))
-    f_repr(pos_elim)=[];
-    repr(:,pos_elim)=[];
-    scatter3(repr(1,:), repr(2,:), repr(3,:), 'filled', 'blue')
-
-
-    iter=iter+1
-
-end
-% ===== FIN DEL CUERPO PRINCIPAL. =====
-% -------------------------------------
-
-iter=iter-1
-
-
-
-% ===== CREACIÓN DE LA GRÁFICA. =====
-% -----------------------------------
-lado_fin=lado/(n^iter);
-if N==1
-    hold on
-    %plot([repr(1,:); repr(1,:)+lado_fin], [f_repr; f_repr], 'o', 'Color',
-    %'blue')
-    plot([repr(1,:); repr(1,:)+lado_fin], [f_repr; f_repr], 'Color','blue')
-    scatter(repr, f_repr, 'red')
-elseif N==2
-    %fill([repr(1,:); repr(1,:)+lado_fin; repr(1,:)+lado_fin; repr(1,:); repr(1,:)], ...
-    %    [repr(2,:); repr(2,:); repr(2,:)+lado_fin; repr(2,:)+lado_fin; repr(2,:);], 'blue')
-    scatter(repr(1,:), repr(2,:), 'blue')
-elseif N==3
+% ===== Cuando N=3 =====
+% ----------------------
     scatter3(repr(1,:), repr(2,:), repr(3,:), 'blue')
 end
