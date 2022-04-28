@@ -7,7 +7,7 @@
 format longE    % Estilo de salida numérica: Notación científica con 15 decimales.
 
 f3=@(v) 1+abs((v(1,:).^2 + v(2,:).^2).^3-3*(v(1,:).^2 + v(2,:).^2)); 		% Definición de la función.
-x_0=[0;0]; lado=sqrt(2); n=4; 		% Inicializacion de algunos datos.
+x_0=[0;0]; lado=sqrt(2); n=4; 		% Inicialización de algunos datos.
 
 lado=lado/n;
 for i=1:n^2         % Bucle para crear una malla de división.
@@ -41,7 +41,7 @@ clear i;
 % ===== SIGUIENTES ITERACIONES =====
 % ----------------------------------
 % Para cada iteración extra que se quiera hacer, basta con repetir el
-% código desde la línea siguiente.
+% código de esta parte.
 
     lado=lado/n; aux_repr=[];        		% Creación de nuevos representantes.
     for i=1:size(representantes,2)
@@ -56,7 +56,7 @@ clear i;
     minimo=min(imagenes);
 	    
     cte_compa=cte_compa/n;		 
-    for i=num_repr:-1:1				% Bucle aplicando el operador de eliminacion.
+    for i=num_repr:-1:1				% Bucle aplicando el operador de eliminación.
 	    if (imagenes(i)-minimo) > cte_compa
 		    representantes(:,i)=[];
 		    imagenes(i)=[];
