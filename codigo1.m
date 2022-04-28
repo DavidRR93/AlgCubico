@@ -1,15 +1,14 @@
-% ===== C Ó D I G O    D E S A R R O L L A D O   E N   S E C I Ó N   3.1 =====
-% ----------------------------------------------------------------------------
+% ===== C Ó D I G O    D E S A R R O L L A D O   E N   S E C C I Ó N   3.1 =====
+% ------------------------------------------------------------------------------
 % El uso de F5 corre todo el código del tirón.
 % El uso de F10 corre línea a línea de manera pausada, lo que permite analizar más su comportamiento.
 
 % ===== P R I M E R A   I T E R A C I Ó N =====
 %  ---------------------------------------------
 
-% ===== PRIMERA PARTE. =====
-% --------------------------
-f1=@(x) 1+abs(x.^3 - 3*x);      % Definicion de la funcion.
-x_0=-2; lado=4; n=3;            % Inicializacion de datos.
+% ----- PRIMERA PARTE. -----
+f1=@(x) 1+abs(x.^3 - 3*x);      % Definición de la función.
+x_0=-2; lado=4; n=3;            % Inicialización de datos.
 
 lado=lado/n;
 for i=1:n                       % Bucle para generar representantes.
@@ -22,10 +21,9 @@ minimo=min(imagenes);
 plot([representantes; representantes+lado], [imagenes; imagenes], 'Color', 'blue')
 
 
-% ===== SEGUNDA PARTE. =====
-% --------------------------
+% ----- SEGUNDA PARTE. -----
 L=9; cte_compa=L*lado;           % sqrt(1)=1 y el factor lado ya incluye la cte de division.
-for i=num_repr:-1:1              % Bucle aplicando el criterio de eliminacion.
+for i=num_repr:-1:1              % Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(i)=[];
 		imagenes(i)=[];
@@ -55,7 +53,7 @@ minimo=min(imagenes);
 plot([representantes; representantes+lado], [imagenes; imagenes], 'Color', 'blue')
 
 cte_compa=cte_compa/n;
-for i=num_repr:-1:1 % Bucle aplicando el criterio de eliminacion.
+for i=num_repr:-1:1		 % Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(i)=[];
 		imagenes(i)=[];
@@ -86,7 +84,7 @@ minimo=min(imagenes);
 plot([representantes; representantes+lado], [imagenes; imagenes], 'Color', 'blue')
 
 cte_compa=cte_compa/n;
-for i=num_repr:-1:1 % Bucle aplicando el criterio de eliminacion.
+for i=num_repr:-1:1 		% Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(i)=[];
 		imagenes(i)=[];
@@ -116,7 +114,7 @@ minimo=min(imagenes);
 plot([representantes; representantes+lado], [imagenes; imagenes], 'Color', 'blue')
 
 cte_compa=cte_compa/n;
-for i=num_repr:-1:1 % Bucle aplicando el criterio de eliminacion.
+for i=num_repr:-1:1		 % Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(i)=[];
 		imagenes(i)=[];
@@ -146,7 +144,7 @@ minimo=min(imagenes);
 scatter(representantes, imagenes, 'blue')
 
 cte_compa=cte_compa/n;
-for i=num_repr:-1:1 % Bucle aplicando el criterio de eliminacion.
+for i=num_repr:-1:1 			% Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(i)=[];
 		imagenes(i)=[];
@@ -177,7 +175,7 @@ minimo=min(imagenes);
 scatter(representantes, imagenes, 'blue')
 
 cte_compa=cte_compa/n;
-for i=num_repr:-1:1 % Bucle aplicando el criterio de eliminacion.
+for i=num_repr:-1:1 			% Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(i)=[];
 		imagenes(i)=[];
@@ -187,7 +185,5 @@ num_repr=length(representantes);
 scatter(representantes, imagenes, 'blue')
 
 
-
-
-% Aumentar el número de iteraciones requiere la copia manual de la segunda
-% iteración. Desde la línea 43 hasta la línea 65.
+% Aumentar el número de iteraciones requiere la copia manual de
+% la segunda iteración (o alguna de las siguientes).
