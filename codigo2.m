@@ -1,11 +1,13 @@
 % ===== CÓDIGO DESARROLLADO PARA LA SECCIÓN 3.2 =====
 % ---------------------------------------------------
+% El uso de F5 corre todo el código del tirón.
+% El uso de F10 corre línea a línea de manera pausada, lo que permite analizar más su comportamiento.
+
 
 format longE    % Estilo de salida numérica: Notación científica con 15 decimales.
 
-% Definicion de la funcion.
-f3=@(v) 1+abs((v(1,:).^2 + v(2,:).^2).^3-3*(v(1,:).^2 + v(2,:).^2)); 		
-x_0=[0;0]; lado=sqrt(2); n=4; 		% Inicializacion de datos.
+f3=@(v) 1+abs((v(1,:).^2 + v(2,:).^2).^3-3*(v(1,:).^2 + v(2,:).^2)); 		% Definición de la función.
+x_0=[0;0]; lado=sqrt(2); n=4; 		% Inicializacion de algunos datos.
 
 lado=lado/n;
 for i=1:n^2         % Bucle para crear una malla de división.
@@ -26,8 +28,8 @@ num_repr=size(representantes,2);
 imagenes = f3(representantes);
 minimo=min(imagenes);
 	
-L=180; cte_compa=L*lado*sqrt(2);		 % El factor lado ya incluye la cte de división.
-for i=num_repr:-1:1				         % Bucle aplicando el operador de eliminación.
+L=180; cte_compa=L*lado*sqrt(2);		 	% El factor lado ya incluye la cte de división.
+for i=num_repr:-1:1				        % Bucle aplicando el operador de eliminación.
 	if (imagenes(i)-minimo) > cte_compa
 		representantes(:,i)=[];
 		imagenes(i)=[];
@@ -41,7 +43,7 @@ clear i;
 % Para cada iteración extra que se quiera hacer, basta con repetir el
 % código desde la línea siguiente.
 
-    lado=lado/n; aux_repr=[];        % Creación de nuevos representantes.
+    lado=lado/n; aux_repr=[];        		% Creación de nuevos representantes.
     for i=1:size(representantes,2)
 	    for k=1:n^2
 		    aux_repr(:,(i-1)*(n^2)+k)=representantes(:,i)+lado*malla(:,k);
@@ -53,8 +55,8 @@ clear i;
     imagenes = f3(representantes);
     minimo=min(imagenes);
 	    
-    cte_compa=cte_compa/n;		 % El factor lado ya incluye la cte de division.
-    for i=num_repr:-1:1				         % Bucle aplicando el operador de eliminacion.
+    cte_compa=cte_compa/n;		 
+    for i=num_repr:-1:1				% Bucle aplicando el operador de eliminacion.
 	    if (imagenes(i)-minimo) > cte_compa
 		    representantes(:,i)=[];
 		    imagenes(i)=[];
