@@ -94,7 +94,10 @@ lado_fin=lado/(n^iter);
 
 
 % Variables que se pueden agregar como salida del programa:
-  % - f_repr;                     (Ya creada)
-  % - num_elim = size(pos_elim, 2); (No creada. Representaría el número de índices eliminados en la iteración.)
+  % f_repr;                               (Ya creada)
+  % num_repr = size(repr,2);              (No creada. Indicaría el número de representantes creados.)
+  % num_elim = size(pos_elim, 2);         (No creada. Indicaría el número de índices eliminados en la iteración.)
+  % rango = max(f_repr) - min(f_repr);    (No creada. Indicaría el rango de las imágenes de los representantes.)
+  %                                       (No creada. Indicaría el tiempo requerido para la ejecución del programa.)
 
 
